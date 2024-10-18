@@ -1,3 +1,5 @@
+import { Dashboard } from '@/components/Dashboard';
+import Nav from '@/components/Nav';
 import SubscriptionCard from '@/components/SubscriptionCard';
 
 export default function Home() {
@@ -29,10 +31,20 @@ export default function Home() {
   ];
 
   return (
-    <div className='grid grid-cols-2 m-5 gap-5'>
-      {services.map((data, index) => (
-        <SubscriptionCard key={index} data={data} />
-      ))}
+    <div className='flex min-h-screen w-full flex-col'>
+      <Nav />
+      <div className='mx-0 md:max-w-[60vw] w-full sm:mx-auto'>
+        <Dashboard />
+        <main className='grid grid-cols-1 lg:grid-cols-2 gap-12 p-4 md:gap-8 md:p-8'>
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+          <SubscriptionCard data={services[0]} />
+        </main>
+      </div>
     </div>
   );
 }

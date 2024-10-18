@@ -14,7 +14,7 @@ type SubscriptionCardProps = {
 };
 
 const SubscriptionCard = async ({ data }: { data: SubscriptionCardProps }) => {
-  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${data.link}&sz=128`);
+  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${data.link}&sz=64`);
 
   const billingType = (period: string) => {
     switch (period) {
@@ -32,17 +32,19 @@ const SubscriptionCard = async ({ data }: { data: SubscriptionCardProps }) => {
   };
 
   return (
-    <Card className='w-96 '>
-      <CardHeader className='flex flex-row gap-4 items-center relative'>
-        <Avatar className=''>
-          <AvatarImage className='' src={icon.url} alt={data.service} />
-          <AvatarFallback className=''>{data.service[0]}</AvatarFallback>
-        </Avatar>
-        <div className='flex flex-col'>
-          <CardTitle>{data.service}</CardTitle>
-          <CardDescription>{data.link}</CardDescription>
+    <Card className='w-full'>
+      <CardHeader className='flex flex-row gap-4 items-center justify-between space-y-0 pb-2'>
+        <div className='flex flex-row items center gap-4'>
+          <Avatar className=''>
+            <AvatarImage className='p-1' src={icon.url} alt={data.service} />
+            <AvatarFallback className=''>{data.service[0]}</AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col justify-center'>
+            <CardTitle>{data.service}</CardTitle>
+            <CardDescription>{data.link}</CardDescription>
+          </div>
         </div>
-        <Button variant='ghost' size='icon' className='absolute right-5 top-5 z-10'>
+        <Button variant='ghost' size='icon' className=''>
           <Pencil1Icon />
         </Button>
       </CardHeader>
