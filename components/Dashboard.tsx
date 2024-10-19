@@ -1,12 +1,18 @@
-import { CreditCard, DollarSign, Users } from 'lucide-react';
+'use client';
+
+import { CreditCard, DollarSign } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubscriptionPie } from './SubscriptionPie';
+import { TotalSpendingChart } from './TotalSpendingChart';
+import { CardStackIcon } from '@radix-ui/react-icons';
+import { calculateTotalSpending, getMonthlySpending } from '@/lib/utils';
+import { Service } from '@/types';
 
-export const description =
-  'An application shell with a header and main content area. The header has a navbar, a search input and and a user nav dropdown. The user nav is toggled by a button with an avatar image. The main content area is divided into two rows. The first row has a grid of cards with statistics. The second row has a grid of cards with a table of recent transactions and a list of recent sales.';
+export function Dashboard({ services }: { services: Service[] }) {
+  const monthlySpending = getMonthlySpending(services);
+  const totalSpending = services.map((service) => calculateTotalSpending(service));
 
-export function Dashboard() {
   return (
     <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>
       <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3'>
@@ -16,31 +22,37 @@ export function Dashboard() {
             <DollarSign className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>$45,231.89</div>
-            <p className='text-xs text-muted-foreground'>+20.1% from last month</p>
+            <div className='text-2xl font-bold'>
+              $
+              {(Math.round(totalSpending.reduce((acc, total) => acc + total) * 100) / 100).toFixed(
+                2
+              )}
+            </div>
+            <TotalSpendingChart services={services} />
           </CardContent>
         </Card>
         <Card x-chunk='dashboard-01-chunk-1'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>Subscriptions</CardTitle>
-            <Users className='h-4 w-4 text-muted-foreground' />
+            <CardStackIcon className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>+2350</div>
-            <p className='text-xs text-muted-foreground'>+180.1% from last month</p>
+          <CardContent className='h-full flex items-center justify-center'>
+            <div>
+              <h1 className='text-center text-7xl mb-8 pb-4 font-bold'>{services.length}</h1>
+            </div>
           </CardContent>
         </Card>
-        <Card x-chunk='dashboard-01-chunk-2' className='md:col-span-2 lg:col-span-1 sm:col-span-1'>
+        <Card
+          x-chunk='dashboard-01-chunk-2'
+          className='md:col-span-2 lg:col-span-1 sm:col-span-1 flex flex-col'
+        >
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Sales</CardTitle>
+            <CardTitle className='text-sm font-medium'>Monthly Spending</CardTitle>
             <CreditCard className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
-          <CardContent className='flex-1 pb-0'>
-            <div className='flex flex-col'>
-              <div className='text-2xl font-bold'>+12,234</div>
-              <p className='text-xs text-muted-foreground'>+19% from last month</p>
-            </div>
-            <SubscriptionPie />
+          <CardContent className=''>
+            <div className='text-2xl font-bold'>${monthlySpending}</div>
+            <SubscriptionPie services={services} />
           </CardContent>
         </Card>
       </div>

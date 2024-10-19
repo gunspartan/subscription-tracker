@@ -1,75 +1,66 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
-import { HomeIcon, Pencil1Icon } from '@radix-ui/react-icons';
+// import { Button } from './ui/button';
+// import { HomeIcon } from '@radix-ui/react-icons';
+import { EditSubscription } from './EditSubscription';
+import { Service } from '@/types';
 
-type SubscriptionCardProps = {
-  service: string;
-  link: string;
-  price: number;
-  billing: string;
-  date: string;
-  email: string;
+const billingType = (period: string) => {
+  switch (period) {
+    case 'Monthly':
+      return 'mo';
+    case 'Yearly':
+      return 'yr';
+    case 'Weekly':
+      return 'wk';
+    case 'Daily':
+      return 'day';
+    default:
+      return 'mo';
+  }
 };
 
-const SubscriptionCard = async ({ data }: { data: SubscriptionCardProps }) => {
-  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${data.link}&sz=64`);
-
-  const billingType = (period: string) => {
-    switch (period) {
-      case 'Monthly':
-        return 'mo';
-      case 'Yearly':
-        return 'yr';
-      case 'Weekly':
-        return 'wk';
-      case 'Daily':
-        return 'day';
-      default:
-        return 'mo';
-    }
-  };
+const SubscriptionCard = async ({ service }: { service: Service }) => {
+  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${service.link}&sz=64`);
 
   return (
     <Card className='w-full'>
-      <CardHeader className='flex flex-row gap-4 items-center justify-between space-y-0 pb-2'>
+      <CardHeader className='flex flex-row gap-4 justify-between space-y-0 pb-2'>
         <div className='flex flex-row items center gap-4'>
           <Avatar className=''>
-            <AvatarImage className='p-1' src={icon.url} alt={data.service} />
-            <AvatarFallback className=''>{data.service[0]}</AvatarFallback>
+            <AvatarImage className='p-1' src={icon.url} alt={service.service} />
+            <AvatarFallback className=''>{service.service[0]}</AvatarFallback>
           </Avatar>
           <div className='flex flex-col justify-center'>
-            <CardTitle>{data.service}</CardTitle>
-            <CardDescription>{data.link}</CardDescription>
+            <CardTitle>{service.service}</CardTitle>
+            <CardDescription>{service.link}</CardDescription>
           </div>
         </div>
-        <Button variant='ghost' size='icon' className=''>
-          <Pencil1Icon />
-        </Button>
+        <EditSubscription variant='edit' />
       </CardHeader>
       <CardContent>
-        <div className='flex flex-col'>
-          <div className='flex flex-row justify-between'>
+        <div className='flex flex-col m-4 gap-2'>
+          <div className='flex flex-row justify-between text-lg'>
             <p>Price:</p>
             <p>
-              ${data.price}/{billingType(data.billing)}
+              ${service.price}/{billingType(service.billing)}
             </p>
           </div>
           <div className='flex flex-row justify-between'>
             <p>Date:</p>
-            <p>{data.date}</p>
+            <p>{service.date.toLocaleDateString()}</p>
           </div>
           <div className='flex flex-row justify-between'>
             <p>Email:</p>
-            <p>{data.email}</p>
+            <p>{service.email}</p>
           </div>
         </div>
       </CardContent>
       <CardFooter className='flex justify-end'>
-        <Button variant='secondary' className=''>
+        {/* <Button variant='secondary' className=''>
           <HomeIcon className='mr-1 h-4 w-4' /> Family
-        </Button>
+        </Button> */}
       </CardFooter>
     </Card>
   );

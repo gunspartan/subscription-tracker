@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 
 const Nav = () => {
   return (
-    <header className='sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6'>
+    <header className='sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-10'>
       <div className='flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4'>
         <form className='ml-auto flex-1 sm:flex-initial'>
           <div className='relative'>
