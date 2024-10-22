@@ -8,17 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Service } from '@/types';
+import { Service } from '@/lib/types';
 import { calculateTotalSpending } from '@/lib/utils';
-
-// const chartData = [
-//   { month: 'January', price: 186 },
-//   { month: 'February', price: 305 },
-//   { month: 'March', price: 237 },
-//   { month: 'April', price: 73 },
-//   { month: 'May', price: 209 },
-//   { month: 'June', price: 214 },
-// ];
 
 const chartConfig = {
   spending: {
@@ -35,12 +26,10 @@ export function TotalSpendingChart({ services }: { services: Service[] }) {
     const month = i < 0 ? i + 12 : i;
     chartData.push({
       month: new Date(today.getFullYear(), month).toLocaleString('default', { month: 'long' }),
-      spending: (
-        Math.round(
-          services
-            .map((service) => calculateTotalSpending(service, new Date(today.getFullYear(), month)))
-            .reduce((acc, total) => acc + total, 0) * 100
-        ) / 100
+      spending: Math.round(
+        services
+          .map((service) => calculateTotalSpending(service, new Date(today.getFullYear(), month)))
+          .reduce((acc, total) => acc + total, 0) / 100
       ).toFixed(2),
     });
   }

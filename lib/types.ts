@@ -1,9 +1,10 @@
 export type Service = {
   service: string;
-  link: string;
+  url: string;
   price: number;
   billing: string;
-  date: Date;
+  startDate: Date;
+  deactivatedAt: Date | null;
   email: string;
 };
 

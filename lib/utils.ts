@@ -1,4 +1,4 @@
-import { ProcessedServices, Service } from '@/types';
+import { ProcessedServices, Service } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -43,16 +43,16 @@ export function getMonthlySpending(services: Service[]) {
     return acc + service.price;
   }, 0);
 
-  return (Math.round(monthly * 100) / 100).toFixed(2);
+  return (Math.round(monthly) / 100).toFixed(2);
 }
 
 export function calculateTotalSpending(service: Service, toDate = new Date()) {
-  if (service.date > toDate) {
+  if (service.startDate > toDate) {
     return 0;
   }
-  // Month is 0 indexed
-  const startMonth = service.date.getMonth();
-  const startYear = service.date.getFullYear();
+
+  const startMonth = service.startDate.getMonth();
+  const startYear = service.startDate.getFullYear();
 
   let monthlyPrice = service.price;
   switch (service.billing) {

@@ -7,7 +7,7 @@ import { SubscriptionPie } from './SubscriptionPie';
 import { TotalSpendingChart } from './TotalSpendingChart';
 import { CardStackIcon } from '@radix-ui/react-icons';
 import { calculateTotalSpending, getMonthlySpending } from '@/lib/utils';
-import { Service } from '@/types';
+import { Service } from '@/lib/types';
 
 export function Dashboard({ services }: { services: Service[] }) {
   const monthlySpending = getMonthlySpending(services);
@@ -23,10 +23,7 @@ export function Dashboard({ services }: { services: Service[] }) {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>
-              $
-              {(Math.round(totalSpending.reduce((acc, total) => acc + total) * 100) / 100).toFixed(
-                2
-              )}
+              ${(Math.round(totalSpending.reduce((acc, total) => acc + total)) / 100).toFixed(2)}
             </div>
             <TotalSpendingChart services={services} />
           </CardContent>

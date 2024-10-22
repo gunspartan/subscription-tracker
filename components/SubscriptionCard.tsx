@@ -1,10 +1,11 @@
 import React from 'react';
+import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 // import { Button } from './ui/button';
 // import { HomeIcon } from '@radix-ui/react-icons';
 import { EditSubscription } from './EditSubscription';
-import { Service } from '@/types';
+import { Service } from '@/lib/types';
 
 const billingType = (period: string) => {
   switch (period) {
@@ -22,7 +23,7 @@ const billingType = (period: string) => {
 };
 
 const SubscriptionCard = async ({ service }: { service: Service }) => {
-  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${service.link}&sz=64`);
+  const icon = await fetch(`https://www.google.com/s2/favicons?domain=${service.url}&sz=64`);
 
   return (
     <Card className='w-full'>
@@ -34,22 +35,22 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
           </Avatar>
           <div className='flex flex-col justify-center'>
             <CardTitle>{service.service}</CardTitle>
-            <CardDescription>{service.link}</CardDescription>
+            <CardDescription>{service.url}</CardDescription>
           </div>
         </div>
-        <EditSubscription variant='edit' />
+        <EditSubscription variant='edit' service={service} />
       </CardHeader>
       <CardContent>
         <div className='flex flex-col m-4 gap-2'>
           <div className='flex flex-row justify-between text-lg'>
             <p>Price:</p>
             <p>
-              ${service.price}/{billingType(service.billing)}
+              ${service.price / 100}/{billingType(service.billing)}
             </p>
           </div>
           <div className='flex flex-row justify-between'>
-            <p>Date:</p>
-            <p>{service.date.toLocaleDateString()}</p>
+            <p>Start Date:</p>
+            <p>{format(service.startDate, 'PPP')}</p>
           </div>
           <div className='flex flex-row justify-between'>
             <p>Email:</p>

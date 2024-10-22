@@ -7,7 +7,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { processServices } from '@/lib/utils';
-import { Service } from '@/types';
+import { Service } from '@/lib/types';
 
 const chartConfig = {
   other: {
