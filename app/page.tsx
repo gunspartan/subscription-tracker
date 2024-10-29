@@ -25,8 +25,8 @@ export default function Home() {
       family: [],
     },
     {
-      service: 'Amazon Prime',
-      url: 'https://amazon.com',
+      service: 'Youtube',
+      url: 'https://youtube.com',
       price: 1000,
       billing: 'Daily',
       activatedAt: new Date('2022-09-01'),

@@ -6,6 +6,7 @@ import { HomeIcon, LockClosedIcon } from '@radix-ui/react-icons';
 import { EditSubscription } from './EditSubscription';
 import { Service } from '@/lib/types';
 import { Badge } from './ui/badge';
+import Link from 'next/link';
 
 const abbreviatedBilling = (period: string) => {
   switch (period) {
@@ -32,7 +33,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
   return (
     <Card className='w-full'>
       <CardHeader className='flex flex-row gap-4 justify-between space-y-0 pb-2'>
-        <div className='flex flex-row items center gap-4'>
+        <Link className='flex flex-row items center gap-4' target='_blank' href={service.url}>
           <Avatar className=''>
             <AvatarImage className='p-1' src={icon.url} alt={service.service} />
             <AvatarFallback className=''>{service.service[0]}</AvatarFallback>
@@ -41,7 +42,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
             <CardTitle>{service.service}</CardTitle>
             <CardDescription>{service.url}</CardDescription>
           </div>
-        </div>
+        </Link>
         <EditSubscription variant='edit' service={service} />
       </CardHeader>
       <CardContent>
