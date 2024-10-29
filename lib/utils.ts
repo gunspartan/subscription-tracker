@@ -44,7 +44,7 @@ export function processServices(services: ProcessedServices[]): ProcessedService
       price: otherTotal,
       url: '',
       billing: '',
-      startDate: new Date(),
+      activatedAt: new Date(),
       deactivatedAt: null,
       email: '',
       family: [],
@@ -86,12 +86,12 @@ export function calculateTotalSpending(service: Service, endDate = new Date()) {
     return calculateTotalSpending(service, service.deactivatedAt);
   }
 
-  if (service.startDate > endDate) {
+  if (service.activatedAt > endDate) {
     return 0;
   }
 
-  const startMonth = service.startDate.getMonth();
-  const startYear = service.startDate.getFullYear();
+  const startMonth = service.activatedAt.getMonth();
+  const startYear = service.activatedAt.getFullYear();
 
   const monthlyPrice = calculateMonthlyPrice(service);
 

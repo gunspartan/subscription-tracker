@@ -3,8 +3,8 @@ export type Service = {
   url: string;
   price: number;
   billing: string;
-  startDate: Date;
-  deactivatedAt: Date | null;
+  activatedAt: Date;
+  deactivatedAt?: Date;
   email: string;
   family: { name: string }[];
 };

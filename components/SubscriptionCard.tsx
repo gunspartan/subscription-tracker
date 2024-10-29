@@ -2,12 +2,12 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
-import { HomeIcon } from '@radix-ui/react-icons';
+import { HomeIcon, LockClosedIcon } from '@radix-ui/react-icons';
 import { EditSubscription } from './EditSubscription';
 import { Service } from '@/lib/types';
+import { Badge } from './ui/badge';
 
-const billingType = (period: string) => {
+const abbreviatedBilling = (period: string) => {
   switch (period) {
     case 'Monthly':
       return 'mo';
@@ -20,6 +20,10 @@ const billingType = (period: string) => {
     default:
       return 'mo';
   }
+};
+
+const pricePerMonthFamily = (price: number, numFamily: number, billingPeriod: string) => {
+  return price / 100 / numFamily + '/' + abbreviatedBilling(billingPeriod) + ' per person';
 };
 
 const SubscriptionCard = async ({ service }: { service: Service }) => {
@@ -44,13 +48,22 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
         <div className='flex flex-col m-4 gap-2'>
           <div className='flex flex-row justify-between text-lg'>
             <p>Price:</p>
-            <p>
-              ${service.price / 100}/{billingType(service.billing)}
-            </p>
+            <div className='flex flex-col'>
+              <p className='text-end'>
+                ${service.price / 100 + '/' + abbreviatedBilling(service.billing)}
+              </p>
+              <p
+                className={`${
+                  service.family.length ? '' : 'invisible'
+                } text-xs text-muted-foreground text-end`}
+              >
+                ${pricePerMonthFamily(service.price, service.family.length, service.billing)}
+              </p>
+            </div>
           </div>
-          <div className='flex flex-row justify-between'>
+          <div className='flex flex-row justify-between mb-4'>
             <p>Start Date:</p>
-            <p>{format(service.startDate, 'PPP')}</p>
+            <p>{format(service.activatedAt, 'PPP')}</p>
           </div>
           <div className='flex flex-row justify-between'>
             <p>Email:</p>
@@ -58,10 +71,13 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className='flex justify-end'>
-        <Button variant='secondary' className={service.family.length ? '' : 'hidden'}>
+      <CardFooter className='flex justify-end gap-2'>
+        <Badge variant='outline' className={service.deactivatedAt ? '' : 'hidden'}>
+          <LockClosedIcon className='mr-1 h-4 w-4' /> Deactivated
+        </Badge>
+        <Badge variant='secondary' className={service.family.length ? '' : 'hidden'}>
           <HomeIcon className='mr-1 h-4 w-4' /> Family
-        </Button>
+        </Badge>
       </CardFooter>
     </Card>
   );

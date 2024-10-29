@@ -43,10 +43,10 @@ const formSchema = z.object({
   service: z.string(),
   url: z.string().url(),
   price: z.string(),
-  startDate: z.date(),
+  activatedAt: z.date(),
   email: z.string().email(),
   billing: z.string(),
-  deactivatedAt: z.date().nullable(),
+  deactivatedAt: z.date().optional(),
   family: z.array(familySchema),
 });
 
@@ -54,10 +54,9 @@ const defaultFormValues = {
   service: '',
   url: '',
   price: 0,
-  startDate: new Date(),
+  activatedAt: new Date(),
   email: '',
   billing: 'Monthly',
-  deactivatedAt: null,
   family: [],
 };
 
@@ -69,16 +68,16 @@ export function EditSubscription({
   service?: Service;
 }) {
   const [open, setOpen] = useState(false);
-  const [isFamilyPlan, setIsFamilyPlan] = useState(!!service?.family?.length);
+  const [isFamilyPlan, setIsFamilyPlan] = useState(service.family.length > 0);
   const [configureFamilyPlan, setConfigureFamilyPlan] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       service: service.service,
-      url: service.url || '',
+      url: service.url,
       price: (service.price / 100).toString(),
-      startDate: service.startDate,
+      activatedAt: service.activatedAt,
       email: service.email,
       billing: service.billing,
       deactivatedAt: service.deactivatedAt,
@@ -104,7 +103,7 @@ export function EditSubscription({
         setOpen(!open);
         form.reset();
         setConfigureFamilyPlan(false);
-        setIsFamilyPlan(false);
+        setIsFamilyPlan(service.family.length > 0);
       }}
     >
       <DialogTrigger asChild>
@@ -137,7 +136,7 @@ export function EditSubscription({
                 control={form.control}
                 name='service'
                 render={({ field }) => (
-                  <FormItem className='mb-2'>
+                  <FormItem className='mb-4'>
                     <FormLabel>Service</FormLabel>
                     <FormControl>
                       <Input placeholder='Netflix' {...field} />
@@ -150,7 +149,7 @@ export function EditSubscription({
                 control={form.control}
                 name='url'
                 render={({ field }) => (
-                  <FormItem className='mb-2'>
+                  <FormItem className='mb-4'>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
                       <Input placeholder='https://netflix.com' {...field} />
@@ -163,7 +162,7 @@ export function EditSubscription({
                 control={form.control}
                 name='price'
                 render={({ field }) => (
-                  <FormItem className='mb-2'>
+                  <FormItem className='mb-4'>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
                       <div className='flex items-center space-x-1'>
@@ -179,7 +178,7 @@ export function EditSubscription({
                 control={form.control}
                 name='billing'
                 render={({ field }) => (
-                  <FormItem className='mb-2'>
+                  <FormItem className='mb-4'>
                     <FormLabel>Billing Period</FormLabel>
                     <FormControl>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -200,10 +199,45 @@ export function EditSubscription({
               />
               <FormField
                 control={form.control}
-                name='startDate'
+                name='activatedAt'
                 render={({ field }) => (
-                  <FormItem className='flex flex-col col-span-2 mb-2'>
+                  <FormItem className='flex flex-col col-span-2 mb-4'>
                     <FormLabel>Start Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant='outline'
+                            className={cn(
+                              'w-full pl-3 text-left font-normal',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+                            <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <Calendar
+                          mode='single'
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='deactivatedAt'
+                render={({ field }) => (
+                  <FormItem className='flex flex-col col-span-2 mb-4'>
+                    <FormLabel>End Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -237,7 +271,7 @@ export function EditSubscription({
                 control={form.control}
                 name='email'
                 render={({ field }) => (
-                  <FormItem className='mb-2'>
+                  <FormItem className='mb-4'>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input placeholder='johndoe@gmail.com' {...field} />
@@ -265,7 +299,7 @@ export function EditSubscription({
                   size='icon'
                   onClick={() => append({ name: '' })}
                 >
-                  <PlusIcon className='h-4 w-4' />
+                  <PlusIcon className='ml-1 h-4 w-4' />
                 </Button>
               </div>
               {fields.length ? (
@@ -277,14 +311,16 @@ export function EditSubscription({
                     render={() => (
                       <FormItem>
                         <FormControl>
-                          <div className='flex gap-2 mb-2'>
+                          <div className='flex flex-row items-center justify-between space-y-0 gap-2 mb-2'>
                             <Input
                               placeholder='John Doe'
-                              {...form.register(`family.${index}` as const, { required: true })}
+                              {...form.register(`family.${index}.name` as const, {
+                                required: true,
+                              })}
                             />
                             <Button
                               type='button'
-                              variant='destructive'
+                              variant='ghost'
                               size='icon'
                               onClick={() => remove(index)}
                             >
