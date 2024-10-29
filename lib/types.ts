@@ -6,10 +6,9 @@ export type Service = {
   startDate: Date;
   deactivatedAt: Date | null;
   email: string;
+  family: string[];
 };
 
-export type ProcessedServices = {
-  service: string;
-  price: number;
+export type ProcessedServices = Service & {
   fill?: string;
 };

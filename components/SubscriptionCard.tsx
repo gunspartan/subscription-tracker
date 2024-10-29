@@ -2,8 +2,8 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-// import { Button } from './ui/button';
-// import { HomeIcon } from '@radix-ui/react-icons';
+import { Button } from './ui/button';
+import { HomeIcon } from '@radix-ui/react-icons';
 import { EditSubscription } from './EditSubscription';
 import { Service } from '@/lib/types';
 
@@ -59,9 +59,9 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
         </div>
       </CardContent>
       <CardFooter className='flex justify-end'>
-        {/* <Button variant='secondary' className=''>
+        <Button variant='secondary' className={service.family.length ? '' : 'hidden'}>
           <HomeIcon className='mr-1 h-4 w-4' /> Family
-        </Button> */}
+        </Button>
       </CardFooter>
     </Card>
   );

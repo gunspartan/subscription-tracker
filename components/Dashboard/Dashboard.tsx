@@ -10,7 +10,8 @@ import { calculateTotalSpending, getMonthlySpending } from '@/lib/utils';
 import { Service } from '@/lib/types';
 
 export function Dashboard({ services }: { services: Service[] }) {
-  const monthlySpending = getMonthlySpending(services);
+  const filteredServices = services.filter((service) => !service.deactivatedAt);
+  const monthlySpending = getMonthlySpending(filteredServices);
   const totalSpending = services.map((service) => calculateTotalSpending(service));
 
   return (
@@ -30,12 +31,14 @@ export function Dashboard({ services }: { services: Service[] }) {
         </Card>
         <Card x-chunk='dashboard-01-chunk-1'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Subscriptions</CardTitle>
+            <CardTitle className='text-sm font-medium'>Active Subscriptions</CardTitle>
             <CardStackIcon className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent className='h-full flex items-center justify-center'>
             <div>
-              <h1 className='text-center text-7xl mb-8 pb-4 font-bold'>{services.length}</h1>
+              <h1 className='text-center text-7xl mb-8 pb-4 font-bold'>
+                {filteredServices.length}
+              </h1>
             </div>
           </CardContent>
         </Card>
@@ -49,7 +52,7 @@ export function Dashboard({ services }: { services: Service[] }) {
           </CardHeader>
           <CardContent className=''>
             <div className='text-2xl font-bold'>${monthlySpending}</div>
-            <SubscriptionPie services={services} />
+            <SubscriptionPie services={filteredServices} />
           </CardContent>
         </Card>
       </div>

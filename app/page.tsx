@@ -1,4 +1,4 @@
-import { Dashboard } from '@/components/Dashboard';
+import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { EditSubscription } from '@/components/EditSubscription';
 import Nav from '@/components/Nav';
 import SubscriptionCard from '@/components/SubscriptionCard';
@@ -8,66 +8,42 @@ export default function Home() {
     {
       service: 'Netflix',
       url: 'https://netflix.com',
-      price: 1199,
-      billing: 'Monthly',
+      price: 1000,
+      billing: 'Daily',
       startDate: new Date('2024-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',
+      family: ['Jane Doe', 'John Doe'],
     },
     {
       service: 'Amazon Prime',
       url: 'https://amazon.com',
-      price: 1299,
+      price: 1000,
       billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
+      startDate: new Date('2022-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',
-    },
-    {
-      service: 'YouTube Premium',
-      url: 'https://youtube.com',
-      price: 599,
-      billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
-      deactivatedAt: null,
-      email: 'johndoe@gmail.com',
-    },
-    {
-      service: 'Netflix',
-      url: 'https://netflix.com',
-      price: 299,
-      billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
-      deactivatedAt: null,
-      email: 'johndoe@gmail.com',
+      family: [],
     },
     {
       service: 'Amazon Prime',
       url: 'https://amazon.com',
-      price: 199,
+      price: 1000,
       billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
+      startDate: new Date('2022-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',
+      family: [],
     },
     {
-      service: 'YouTube Premium',
-      url: 'https://youtube.com',
-      price: 1299,
+      service: 'Amazon Prime',
+      url: 'https://amazon.com',
+      price: 1000,
       billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
+      startDate: new Date('2022-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',
-    },
-
-    {
-      service: 'YouTube Premium',
-      url: 'https://youtube.com',
-      price: 1299,
-      billing: 'Monthly',
-      startDate: new Date('2024-09-01'),
-      deactivatedAt: null,
-      email: 'johndoe@gmail.com',
+      family: [],
     },
   ];
 
