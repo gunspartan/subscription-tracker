@@ -35,14 +35,8 @@ export function TotalSpendingChart({ services }: { services: Service[] }) {
   }
 
   return (
-    <ChartContainer config={chartConfig}>
-      <BarChart
-        accessibilityLayer
-        data={chartData}
-        margin={{
-          top: 20,
-        }}
-      >
+    <ChartContainer config={chartConfig} className=' min-h-[200px] max-h-[250px]'>
+      <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey='month'
@@ -50,11 +44,10 @@ export function TotalSpendingChart({ services }: { services: Service[] }) {
           tickMargin={10}
           axisLine={false}
           tickFormatter={(value) => value.slice(0, 3)}
+          allowDataOverflow={false}
         />
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-        <Bar dataKey='spending' fill='var(--color-spending)' radius={8}>
-          <LabelList position='top' offset={12} className='fill-foreground' fontSize={12} />
-        </Bar>
+        <Bar dataKey='spending' fill='var(--color-spending)' radius={8}></Bar>
       </BarChart>
     </ChartContainer>
   );

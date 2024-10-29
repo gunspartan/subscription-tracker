@@ -9,7 +9,7 @@ export default function Home() {
       service: 'Netflix',
       url: 'https://netflix.com',
       price: 1000,
-      billing: 'Daily',
+      billing: 'Monthly',
       startDate: new Date('2024-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',

@@ -17,12 +17,12 @@ export function Dashboard({ services }: { services: Service[] }) {
   return (
     <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>
       <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3'>
-        <Card x-chunk='dashboard-01-chunk-0'>
+        <Card x-chunk='dashboard-01-chunk-0' className=''>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>Total Spent</CardTitle>
             <DollarSign className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
-          <CardContent>
+          <CardContent className='flex flex-col gap-4'>
             <div className='text-2xl font-bold'>
               ${(Math.round(totalSpending.reduce((acc, total) => acc + total)) / 100).toFixed(2)}
             </div>
@@ -51,7 +51,7 @@ export function Dashboard({ services }: { services: Service[] }) {
             <CreditCard className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent className=''>
-            <div className='text-2xl font-bold'>${monthlySpending}</div>
+            <div className='text-2xl font-bold'>${monthlySpending}/mo</div>
             <SubscriptionPie services={filteredServices} />
           </CardContent>
         </Card>
