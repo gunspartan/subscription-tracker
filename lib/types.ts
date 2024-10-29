@@ -6,7 +6,7 @@ export type Service = {
   startDate: Date;
   deactivatedAt: Date | null;
   email: string;
-  family: string[];
+  family: { name: string }[];
 };
 
 export type ProcessedServices = Service & {

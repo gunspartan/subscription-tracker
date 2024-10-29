@@ -13,7 +13,7 @@ export default function Home() {
       startDate: new Date('2024-09-01'),
       deactivatedAt: null,
       email: 'johndoe@gmail.com',
-      family: ['Jane Doe', 'John Doe'],
+      family: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
     },
     {
       service: 'Amazon Prime',

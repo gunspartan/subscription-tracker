@@ -35,6 +35,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Label } from './ui/label';
 import { Checkbox } from './ui/checkbox';
 
+const familySchema = z.object({
+  name: z.string(),
+});
+
 const formSchema = z.object({
   service: z.string(),
   url: z.string().url(),
@@ -43,7 +47,7 @@ const formSchema = z.object({
   email: z.string().email(),
   billing: z.string(),
   deactivatedAt: z.date().nullable(),
-  family: z.array(z.string()),
+  family: z.array(familySchema),
 });
 
 const defaultFormValues = {
@@ -97,7 +101,6 @@ export function EditSubscription({
     <Dialog
       open={open}
       onOpenChange={() => {
-        console.log(service);
         setOpen(!open);
         form.reset();
         setConfigureFamilyPlan(false);
@@ -256,7 +259,12 @@ export function EditSubscription({
             <div className={`${configureFamilyPlan ? '' : 'hidden'} col-span-2`}>
               <div className='flex flex-row items-center justify-between space-y-0 pb-2'>
                 <FormLabel>Family Members</FormLabel>
-                <Button type='button' variant='ghost' size='icon' onClick={() => append('')}>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon'
+                  onClick={() => append({ name: '' })}
+                >
                   <PlusIcon className='h-4 w-4' />
                 </Button>
               </div>

@@ -47,6 +47,7 @@ export function processServices(services: ProcessedServices[]): ProcessedService
       startDate: new Date(),
       deactivatedAt: null,
       email: '',
+      family: [],
     });
   }
 
