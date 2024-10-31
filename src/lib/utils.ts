@@ -29,7 +29,7 @@ export function calculateMonthlyPrice(service: Service) {
 export function processServices(services: ProcessedServices[]): ProcessedServices[] {
   let mergedServices = services;
 
-  if (services.length <= 5) {
+  if (mergedServices.length >= 5) {
     // Merge services from the 5th index into the 'Other' category
     mergedServices = services.slice(0, 4);
     const otherServices = services.slice(4);
@@ -45,7 +45,6 @@ export function processServices(services: ProcessedServices[]): ProcessedService
       url: '',
       billing: '',
       activatedAt: new Date(),
-      deactivatedAt: null,
       email: '',
       family: [],
     });
