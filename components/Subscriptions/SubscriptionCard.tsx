@@ -1,12 +1,13 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { HomeIcon, LockClosedIcon } from '@radix-ui/react-icons';
-import { EditSubscription } from './EditSubscription';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { LockClosedIcon } from '@radix-ui/react-icons';
+import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 import { Service } from '@/lib/types';
-import { Badge } from './ui/badge';
+import { Badge } from '../ui/badge';
 import Link from 'next/link';
+import FamilyDialog from './FamilyDialog';
 
 const abbreviatedBilling = (period: string) => {
   switch (period) {
@@ -43,7 +44,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
             <CardDescription>{service.url}</CardDescription>
           </div>
         </Link>
-        <EditSubscription variant='edit' service={service} />
+        <EditSubscriptionDialog variant='edit' service={service} />
       </CardHeader>
       <CardContent>
         <div className='flex flex-col m-4 gap-2'>
@@ -76,9 +77,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
         <Badge variant='outline' className={service.deactivatedAt ? '' : 'hidden'}>
           <LockClosedIcon className='mr-1 h-4 w-4' /> Deactivated
         </Badge>
-        <Badge variant='secondary' className={service.family.length ? '' : 'hidden'}>
-          <HomeIcon className='mr-1 h-4 w-4' /> Family
-        </Badge>
+        <FamilyDialog service={service} />
       </CardFooter>
     </Card>
   );

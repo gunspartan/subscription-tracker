@@ -26,14 +26,15 @@ import {
   FormItem,
   FormLabel,
   FormDescription,
-} from './ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+} from '../ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
-import { Calendar } from './ui/calendar';
+import { Calendar } from '../ui/calendar';
 import { DollarSign } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Label } from './ui/label';
-import { Checkbox } from './ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Label } from '../ui/label';
+import { Checkbox } from '../ui/checkbox';
+import { Separator } from '../ui/separator';
 
 const familySchema = z.object({
   name: z.string(),
@@ -60,7 +61,7 @@ const defaultFormValues = {
   family: [],
 };
 
-export function EditSubscription({
+export function EditSubscriptionDialog({
   variant = 'edit',
   service = defaultFormValues,
 }: {
@@ -122,7 +123,10 @@ export function EditSubscription({
             className='space-y-8 grid grid-cols-2 gap-x-2'
           >
             <DialogHeader className='col-span-2'>
-              <DialogTitle>{variant === 'edit' ? 'Edit' : 'New'} Subscription</DialogTitle>
+              <DialogTitle className='flex gap-2 items-center'>
+                {variant === 'edit' ? <Pencil1Icon /> : <PlusIcon />}{' '}
+                {variant === 'edit' ? 'Edit' : 'New'} Subscription
+              </DialogTitle>
               <DialogDescription>
                 Make changes to your subscription here. Click save when you&apos;re done.
               </DialogDescription>
@@ -280,6 +284,7 @@ export function EditSubscription({
                   </FormItem>
                 )}
               />
+              <Separator className='w-full col-span-2' />
               <div className='w-full space-y-2 mt-4'>
                 <div className='flex items-center justify-between '>
                   <Label>Family Plan</Label>
