@@ -42,16 +42,26 @@ const familySchema = z.object({
   name: z.string(),
 });
 
-const formSchema = z.object({
-  service: z.string(),
-  url: z.string().url(),
-  price: z.string(),
-  activatedAt: z.date(),
-  email: z.string().email(),
-  billing: z.string(),
-  deactivatedAt: z.date().optional(),
-  family: z.array(familySchema),
-});
+const formSchema = z
+  .object({
+    service: z.string().min(1, 'Service name is required'),
+    url: z.string().url(),
+    price: z
+      .union([z.string().transform((x) => x.replace(/[^0-9.-]+/g, '')), z.number()])
+      .pipe(z.coerce.number().min(0.0001).max(999999999)),
+    activatedAt: z.date({
+      invalid_type_error: 'Provide a valid start date',
+      required_error: 'Provide a Start date',
+    }),
+    deactivatedAt: z.date().optional(),
+    email: z.string().email(),
+    billing: z.string(),
+    family: z.array(familySchema),
+  })
+  .refine((data) => (data.deactivatedAt ? data.activatedAt < data.deactivatedAt : true), {
+    path: ['deactivatedAt'],
+    message: 'End date must be after the start date',
+  });
 
 const defaultFormValues = {
   id: '',
@@ -81,7 +91,7 @@ export function EditSubscriptionDialog({
     defaultValues: {
       service: service.service,
       url: service.url,
-      price: (service.price / 100).toString(),
+      price: service.price / 100,
       activatedAt: service.activatedAt,
       email: service.email,
       billing: service.billing,
@@ -104,7 +114,7 @@ export function EditSubscriptionDialog({
       id: service.id,
       service: values.service,
       url: values.url,
-      price: Math.round(parseFloat(values.price) * 100), // Convert to cents
+      price: Math.round(values.price * 100), // Convert to cents
       billing: values.billing,
       activatedAt: values.activatedAt,
       deactivatedAt: values.deactivatedAt ?? null,
@@ -288,7 +298,10 @@ export function EditSubscriptionDialog({
                           mode='single'
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                          disabled={(date) =>
+                            date > new Date(new Date().setFullYear(new Date().getFullYear() + 1)) ||
+                            date < form.getValues('activatedAt')
+                          }
                           initialFocus
                         />
                       </PopoverContent>
