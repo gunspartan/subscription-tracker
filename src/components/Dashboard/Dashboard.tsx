@@ -12,7 +12,9 @@ import { Service } from '@/lib/types';
 export function Dashboard({ services }: { services: Service[] }) {
   const filteredServices = services.filter((service) => !service.deactivatedAt);
   const monthlySpending = getMonthlySpending(filteredServices);
-  const totalSpending = services.map((service) => calculateTotalSpending(service));
+  const totalSpending = services.length
+    ? services.map((service) => calculateTotalSpending(service))
+    : [0];
 
   return (
     <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>

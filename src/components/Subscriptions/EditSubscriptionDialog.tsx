@@ -35,7 +35,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
 import { Separator } from '../ui/separator';
+import { addService, editService } from '@/actions/actions';
 
+// Family array needs to be an array of objects for react-hook-form
 const familySchema = z.object({
   name: z.string(),
 });
@@ -52,10 +54,12 @@ const formSchema = z.object({
 });
 
 const defaultFormValues = {
+  id: '',
   service: '',
   url: '',
   price: 0,
   activatedAt: new Date(),
+  deactivatedAt: null,
   email: '',
   billing: 'Monthly',
   family: [],
@@ -81,20 +85,42 @@ export function EditSubscriptionDialog({
       activatedAt: service.activatedAt,
       email: service.email,
       billing: service.billing,
-      deactivatedAt: service.deactivatedAt,
-      family: service.family,
+      deactivatedAt: service.deactivatedAt ?? undefined, // Optional fields need to be set to undefined for date picker
+      family: service.family.map((name) => ({ name })),
     },
   });
 
   const { fields, append, remove } = useFieldArray({ name: 'family', control: form.control });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(isFamilyPlan);
-    if (isFamilyPlan) {
-      console.log('Family Plan');
+    if (isFamilyPlan && !configureFamilyPlan) {
       setConfigureFamilyPlan(true);
+      // Don't submit the form if family plan is enabled
+      // And the user hasn't configured the family members
+      return;
     }
-    console.log(values);
+
+    const data = {
+      id: service.id,
+      service: values.service,
+      url: values.url,
+      price: Math.round(parseFloat(values.price) * 100), // Convert to cents
+      billing: values.billing,
+      activatedAt: values.activatedAt,
+      deactivatedAt: values.deactivatedAt ?? null,
+      email: values.email,
+      family: isFamilyPlan
+        ? values.family.map((member) => member.name) // Format the array for backend
+        : [], // Remove family array if not a family plan
+    };
+
+    if (variant === 'new') {
+      addService(data);
+    }
+
+    if (variant === 'edit') {
+      editService(data);
+    }
   };
 
   return (
@@ -354,7 +380,9 @@ export function EditSubscriptionDialog({
                   Back
                 </Button>
               )}
-              <Button type='submit'>Save changes</Button>
+              <Button type='submit' disabled={configureFamilyPlan && !fields.length}>
+                Save changes
+              </Button>
             </DialogFooter>
           </form>
         </Form>

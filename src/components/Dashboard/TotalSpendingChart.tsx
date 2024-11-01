@@ -26,10 +26,12 @@ export function TotalSpendingChart({ services }: { services: Service[] }) {
     const month = i < 0 ? i + 12 : i;
     chartData.push({
       month: new Date(today.getFullYear(), month).toLocaleString('default', { month: 'long' }),
-      spending: Math.round(
-        services
-          .map((service) => calculateTotalSpending(service, new Date(today.getFullYear(), month)))
-          .reduce((acc, total) => acc + total, 0) / 100
+      spending: (
+        Math.round(
+          services
+            .map((service) => calculateTotalSpending(service, new Date(today.getFullYear(), month)))
+            .reduce((acc, total) => acc + total, 0)
+        ) / 100
       ).toFixed(2),
     });
   }
