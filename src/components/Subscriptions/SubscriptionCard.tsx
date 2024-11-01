@@ -54,7 +54,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
             <p>Price:</p>
             <div className='flex flex-col'>
               <p className='text-end'>
-                ${service.price / 100 + '/' + abbreviatedBilling(service.billing)}
+                ${formatPrice(service.price) + '/' + abbreviatedBilling(service.billing)}
               </p>
               <p
                 className={`${

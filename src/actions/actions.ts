@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/db';
 import { Service } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 
 export async function addService(service: Omit<Service, 'id'>) {
   await prisma.service.create({
@@ -16,6 +17,8 @@ export async function addService(service: Omit<Service, 'id'>) {
       family: service.family,
     },
   });
+
+  revalidatePath('/');
 }
 
 export async function editService(service: Service) {
@@ -32,4 +35,6 @@ export async function editService(service: Service) {
       family: service.family,
     },
   });
+
+  revalidatePath('/');
 }

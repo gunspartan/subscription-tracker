@@ -83,6 +83,7 @@ export function EditSubscriptionDialog({
   service?: Service;
 }) {
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isFamilyPlan, setIsFamilyPlan] = useState(service.family.length > 0);
   const [configureFamilyPlan, setConfigureFamilyPlan] = useState(false);
 
@@ -102,7 +103,7 @@ export function EditSubscriptionDialog({
 
   const { fields, append, remove } = useFieldArray({ name: 'family', control: form.control });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (isFamilyPlan && !configureFamilyPlan) {
       setConfigureFamilyPlan(true);
       // Don't submit the form if family plan is enabled
@@ -124,25 +125,38 @@ export function EditSubscriptionDialog({
         : [], // Remove family array if not a family plan
     };
 
+    setIsLoading(true);
     if (variant === 'new') {
-      addService(data);
+      await addService(data);
     }
 
     if (variant === 'edit') {
-      editService(data);
+      await editService(data);
     }
+
+    setOpen(false);
+    setIsLoading(false);
+  };
+
+  const resetForm = () => {
+    setOpen(!open);
+    form.reset({
+      service: service.service,
+      url: service.url,
+      price: service.price / 100,
+      activatedAt: service.activatedAt,
+      email: service.email,
+      billing: service.billing,
+      deactivatedAt: service.deactivatedAt ?? undefined,
+      family: service.family.map((name) => ({ name })),
+    });
+    setConfigureFamilyPlan(false);
+    setIsFamilyPlan(service.family.length > 0);
+    setIsLoading(false);
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={() => {
-        setOpen(!open);
-        form.reset();
-        setConfigureFamilyPlan(false);
-        setIsFamilyPlan(service.family.length > 0);
-      }}
-    >
+    <Dialog open={open} onOpenChange={resetForm}>
       <DialogTrigger asChild>
         <Button
           variant={`${variant === 'edit' ? 'ghost' : 'default'}`}
@@ -156,7 +170,7 @@ export function EditSubscriptionDialog({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='space-y-8 grid grid-cols-2 gap-x-2'
+            className={`${isLoading ? '*:opacity-75' : ''} space-y-8 grid grid-cols-2 gap-x-2`}
           >
             <DialogHeader className='col-span-2'>
               <DialogTitle className='flex gap-2 items-center'>
@@ -393,7 +407,7 @@ export function EditSubscriptionDialog({
                   Back
                 </Button>
               )}
-              <Button type='submit' disabled={configureFamilyPlan && !fields.length}>
+              <Button type='submit' disabled={(configureFamilyPlan && !fields.length) || isLoading}>
                 Save changes
               </Button>
             </DialogFooter>
