@@ -1,5 +1,7 @@
 services:
   app:
+    depends_on:
+      - db
     build:
       context: .
     image: subscription-tracker
@@ -7,6 +9,8 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
+    env_file:
+      - .env
     develop:
       watch:
         - action: sync
