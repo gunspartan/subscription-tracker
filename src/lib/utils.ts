@@ -6,24 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function calculateMonthlyPrice(service: Service) {
-  let monthlyPrice = service.price;
-  switch (service.billing) {
-    case 'Yearly':
-      monthlyPrice = service.price / 12;
-      break;
-    case 'Monthly':
-      monthlyPrice = service.price * 1;
-      break;
-    case 'Weekly':
-      monthlyPrice = service.price * 4;
-      break;
-    case 'Daily':
-      monthlyPrice = service.price * 30;
-      break;
-  }
-
-  return monthlyPrice;
+export function formatPrice(price: number) {
+  return (Math.round(price) / 100).toFixed(2);
 }
 
 export function processServices(services: ProcessedServices[]): ProcessedServices[] {
@@ -66,6 +50,26 @@ export function processServices(services: ProcessedServices[]): ProcessedService
   return servicesWithColors;
 }
 
+export function calculateMonthlyPrice(service: Service) {
+  let monthlyPrice = service.price;
+  switch (service.billing) {
+    case 'Yearly':
+      monthlyPrice = service.price / 12;
+      break;
+    case 'Monthly':
+      monthlyPrice = service.price * 1;
+      break;
+    case 'Weekly':
+      monthlyPrice = service.price * 4;
+      break;
+    case 'Daily':
+      monthlyPrice = service.price * 30;
+      break;
+  }
+
+  return monthlyPrice;
+}
+
 export function getMonthlySpending(services: Service[]) {
   const monthly = services.reduce((acc, service) => {
     if (service.billing === 'Yearly') {
@@ -79,7 +83,7 @@ export function getMonthlySpending(services: Service[]) {
     return acc + service.price;
   }, 0);
 
-  return (Math.round(monthly) / 100).toFixed(2);
+  return formatPrice(monthly);
 }
 
 export function calculateTotalSpending(service: Service, endDate = new Date()) {

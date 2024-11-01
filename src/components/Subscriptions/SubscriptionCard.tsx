@@ -8,6 +8,7 @@ import { Service } from '@/lib/types';
 import { Badge } from '../ui/badge';
 import Link from 'next/link';
 import FamilyDialog from './FamilyDialog';
+import { formatPrice } from '@/lib/utils';
 
 const abbreviatedBilling = (period: string) => {
   switch (period) {
@@ -26,10 +27,7 @@ const abbreviatedBilling = (period: string) => {
 
 const pricePerMonthFamily = (price: number, numFamily: number, billingPeriod: string) => {
   return (
-    (Math.round(price / (numFamily + 1)) / 100).toFixed(2) +
-    '/' +
-    abbreviatedBilling(billingPeriod) +
-    ' per person'
+    formatPrice(price / (numFamily + 1)) + '/' + abbreviatedBilling(billingPeriod) + ' per person'
   );
 };
 

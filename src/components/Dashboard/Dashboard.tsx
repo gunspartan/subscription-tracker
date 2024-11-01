@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubscriptionPie } from './SubscriptionPie';
 import { TotalSpendingChart } from './TotalSpendingChart';
 import { CardStackIcon } from '@radix-ui/react-icons';
-import { calculateTotalSpending, getMonthlySpending } from '@/lib/utils';
+import { calculateTotalSpending, formatPrice, getMonthlySpending } from '@/lib/utils';
 import { Service } from '@/lib/types';
 
 export function Dashboard({ services }: { services: Service[] }) {
@@ -26,7 +26,7 @@ export function Dashboard({ services }: { services: Service[] }) {
           </CardHeader>
           <CardContent className='flex flex-col gap-4'>
             <div className='text-2xl font-bold'>
-              ${(Math.round(totalSpending.reduce((acc, total) => acc + total)) / 100).toFixed(2)}
+              ${formatPrice(totalSpending.reduce((acc, total) => acc + total))}
             </div>
             <TotalSpendingChart services={services} />
           </CardContent>
