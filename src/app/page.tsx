@@ -16,9 +16,14 @@ export default async function Home() {
           <EditSubscriptionDialog variant='new' />
         </div>
         <main className='grid grid-cols-1 lg:grid-cols-2 gap-12 p-4 md:gap-8 md:p-8'>
-          {services.map((service, index) => (
-            <SubscriptionCard key={index} service={service} />
-          ))}
+          {services.length ? (
+            services.map((service, index) => <SubscriptionCard key={index} service={service} />)
+          ) : (
+            <div className='text-center col-span-full'>
+              <h1 className='text-2xl font-bold text-muted-foreground '>No services yet.</h1>
+              <p className='text-xs text-muted-foreground'>Add a new service to get started. </p>
+            </div>
+          )}
         </main>
       </div>
     </div>

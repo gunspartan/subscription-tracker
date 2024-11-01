@@ -25,7 +25,12 @@ const abbreviatedBilling = (period: string) => {
 };
 
 const pricePerMonthFamily = (price: number, numFamily: number, billingPeriod: string) => {
-  return price / 100 / numFamily + '/' + abbreviatedBilling(billingPeriod) + ' per person';
+  return (
+    (Math.round(price / (numFamily + 1)) / 100).toFixed(2) +
+    '/' +
+    abbreviatedBilling(billingPeriod) +
+    ' per person'
+  );
 };
 
 const SubscriptionCard = async ({ service }: { service: Service }) => {

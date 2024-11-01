@@ -40,11 +40,13 @@ export function processServices(services: ProcessedServices[]): ProcessedService
     }, 0);
 
     mergedServices.push({
+      id: 'other',
       service: 'Other',
       price: otherTotal,
       url: '',
       billing: '',
       activatedAt: new Date(),
+      deactivatedAt: null,
       email: '',
       family: [],
     });
@@ -81,11 +83,16 @@ export function getMonthlySpending(services: Service[]) {
 }
 
 export function calculateTotalSpending(service: Service, endDate = new Date()) {
+  // Calculate the spending up to the deactivation date
   if (service.deactivatedAt && service.deactivatedAt < endDate) {
     return calculateTotalSpending(service, service.deactivatedAt);
   }
 
-  if (service.activatedAt > endDate) {
+  // If the service has already been deactivated
+  if (
+    service.activatedAt.getMonth() > endDate.getMonth() &&
+    service.activatedAt.getFullYear() >= endDate.getFullYear()
+  ) {
     return 0;
   }
 
@@ -95,5 +102,6 @@ export function calculateTotalSpending(service: Service, endDate = new Date()) {
   const monthlyPrice = calculateMonthlyPrice(service);
 
   const months = (endDate.getFullYear() - startYear) * 12 + endDate.getMonth() - startMonth;
-  return monthlyPrice * months;
+  // Include the current month
+  return monthlyPrice * (months + 1);
 }

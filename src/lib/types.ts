@@ -1,4 +1,5 @@
 export type Service = {
+  id: string;
   service: string;
   url: string;
   price: number;
@@ -6,7 +7,7 @@ export type Service = {
   activatedAt: Date;
   deactivatedAt: Date | null;
   email: string;
-  family: { name: string }[];
+  family: string[];
 };
 
 export type ProcessedServices = Service & {

@@ -22,12 +22,5 @@ model Service {
   activatedAt   DateTime  @default(now())
   deactivatedAt DateTime?
   email         String
-  family        Family[]
-}
-
-model Family {
-  id        String   @id @default(cuid())
-  name      String
-  Service   Service? @relation(fields: [serviceId], references: [id])
-  serviceId String?
+  family        String[]  @default([])
 }

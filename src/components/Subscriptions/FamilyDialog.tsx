@@ -34,7 +34,7 @@ const FamilyDialog = ({ service }: { service: Service }) => {
           {service.family.map((member, index) => (
             <div key={index} className='flex flex-row gap-4'>
               <div className='flex flex-col grow'>
-                <p className='font-bold'>{member.name}</p>
+                <p className='font-bold'>{member}</p>
                 <p className='text-muted-foreground'>Member</p>
                 <Separator className='' />
               </div>
