@@ -2,47 +2,10 @@ import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { EditSubscriptionDialog } from '@/components/Subscriptions/EditSubscriptionDialog';
 import Nav from '@/components/Nav';
 import SubscriptionCard from '@/components/Subscriptions/SubscriptionCard';
+import prisma from '@/lib/db';
 
-export default function Home() {
-  const services = [
-    {
-      service: 'Netflix',
-      url: 'https://netflix.com',
-      price: 1000,
-      billing: 'Yearly',
-      activatedAt: new Date('2024-09-01'),
-      deactivatedAt: new Date(),
-      email: 'johndoe@gmail.com',
-      family: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
-    },
-    {
-      service: 'Amazon Prime',
-      url: 'https://amazon.com',
-      price: 1000,
-      billing: 'Monthly',
-      activatedAt: new Date('2022-09-01'),
-      email: 'johndoe@gmail.com',
-      family: [],
-    },
-    {
-      service: 'Youtube',
-      url: 'https://youtube.com',
-      price: 1000,
-      billing: 'Daily',
-      activatedAt: new Date('2022-09-01'),
-      email: 'johndoe@gmail.com',
-      family: [],
-    },
-    {
-      service: 'Amazon Prime',
-      url: 'https://amazon.com',
-      price: 1000,
-      billing: 'Monthly',
-      activatedAt: new Date('2022-09-01'),
-      email: 'johndoe@gmail.com',
-      family: [],
-    },
-  ];
+export default async function Home() {
+  const services = await prisma.service.findMany();
 
   return (
     <div className='flex min-h-screen w-full flex-col'>

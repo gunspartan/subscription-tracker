@@ -4,7 +4,7 @@ export type Service = {
   price: number;
   billing: string;
   activatedAt: Date;
-  deactivatedAt?: Date;
+  deactivatedAt: Date | null;
   email: string;
   family: { name: string }[];
 };
