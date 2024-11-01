@@ -2,13 +2,12 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { LockClosedIcon } from '@radix-ui/react-icons';
 import { EditSubscriptionDialog } from './EditSubscriptionDialog';
 import { Service } from '@/lib/types';
-import { Badge } from '../ui/badge';
 import Link from 'next/link';
 import FamilyDialog from './FamilyDialog';
 import { formatPrice } from '@/lib/utils';
+import DeactivatedBadge from './DeactivatedBadge';
 
 const abbreviatedBilling = (period: string) => {
   switch (period) {
@@ -77,9 +76,7 @@ const SubscriptionCard = async ({ service }: { service: Service }) => {
         </div>
       </CardContent>
       <CardFooter className='flex justify-end gap-2'>
-        <Badge variant='outline' className={service.deactivatedAt ? '' : 'hidden'}>
-          <LockClosedIcon className='mr-1 h-4 w-4' /> Deactivated
-        </Badge>
+        <DeactivatedBadge deactivatedAt={service.deactivatedAt} />
         <FamilyDialog service={service} />
       </CardFooter>
     </Card>
