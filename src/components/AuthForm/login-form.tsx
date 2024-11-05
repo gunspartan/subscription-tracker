@@ -8,45 +8,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 
-const signUpSchema = z
-  .object({
-    email: z.string().email('Please enter a valid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string().min(8, 'Password must be at least 8 characters'),
-  })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['confirmPassword'],
-        message: 'Passwords do not match',
-      });
-    }
-  });
+const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
-export function SignUpForm() {
-  const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
+export function LoginForm() {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
-      confirmPassword: '',
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signUpSchema>) => {
-    console.log(values);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit((values) => console.log(values))}>
         <Card className='mx-auto max-w-sm'>
           <CardHeader>
-            <CardTitle className='text-2xl'>Sign up</CardTitle>
-            <CardDescription>Enter your details below to create to your account</CardDescription>
+            <CardTitle className='text-2xl'>Login</CardTitle>
+            <CardDescription>Enter your email below to login to your account</CardDescription>
           </CardHeader>
           <CardContent>
             <div className='grid gap-4'>
@@ -76,21 +60,9 @@ export function SignUpForm() {
                   <FormItem className='grid gap-2'>
                     <div className='flex items-center'>
                       <FormLabel htmlFor='password'>Password</FormLabel>
-                    </div>
-                    <FormControl>
-                      <Input id='password' type='password' required {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='confirmPassword'
-                render={({ field }) => (
-                  <FormItem className='grid gap-2'>
-                    <div className='flex items-center'>
-                      <FormLabel htmlFor='password'>Confirm Password</FormLabel>
+                      <Link href='#' className='ml-auto inline-block text-sm underline'>
+                        Forgot your password?
+                      </Link>
                     </div>
                     <FormControl>
                       <Input id='password' type='password' required {...field} />
@@ -100,16 +72,16 @@ export function SignUpForm() {
                 )}
               />
               <Button type='submit' className='w-full'>
-                Sign Up
+                Login
               </Button>
               <Button variant='outline' className='w-full'>
-                Sign up with Google
+                Login with Google
               </Button>
             </div>
             <div className='mt-4 text-center text-sm'>
-              Already have an account?{' '}
-              <Link href='/sign-in' className='underline'>
-                Login
+              Don&apos;t have an account?{' '}
+              <Link href='/sign-up' className='underline'>
+                Sign up
               </Link>
             </div>
           </CardContent>
