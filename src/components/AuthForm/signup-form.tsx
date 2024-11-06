@@ -1,17 +1,21 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
+import { authClient } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 
 const signUpSchema = z
   .object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
     email: z.string().email('Please enter a valid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string().min(8, 'Password must be at least 8 characters'),
@@ -27,29 +31,68 @@ const signUpSchema = z
   });
 
 export function SignUpForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signUpSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    const { name, email, password } = values;
+    await authClient.signUp.email(
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        onRequest: () => {
+          setIsSubmitting(true);
+        },
+        onSuccess: () => {
+          form.reset();
+          setIsSubmitting(false);
+          router.push('/sign-in');
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+          router.push('/sign-in');
+          setIsSubmitting(false);
+        },
+      }
+    );
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className='mx-auto max-w-sm'>
+        <Card className={`${isSubmitting ? 'opacity-75' : ''} mx-auto max-w-sm`}>
           <CardHeader>
             <CardTitle className='text-2xl'>Sign up</CardTitle>
             <CardDescription>Enter your details below to create to your account</CardDescription>
           </CardHeader>
           <CardContent>
             <div className='grid gap-4'>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem className='grid gap-2'>
+                    <FormLabel htmlFor='name'>Name</FormLabel>
+                    <FormControl>
+                      <Input id='name' type='name' placeholder='John Doe' required {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name='email'
@@ -99,10 +142,10 @@ export function SignUpForm() {
                   </FormItem>
                 )}
               />
-              <Button type='submit' className='w-full'>
+              <Button type='submit' className='w-full' disabled={isSubmitting}>
                 Sign Up
               </Button>
-              <Button variant='outline' className='w-full'>
+              <Button variant='outline' className='w-full' disabled={isSubmitting}>
                 Sign up with Google
               </Button>
             </div>

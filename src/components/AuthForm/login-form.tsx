@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { authClient } from '@/lib/auth-client';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -16,6 +18,8 @@ const loginSchema = z.object({
 });
 
 export function LoginForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -24,10 +28,34 @@ export function LoginForm() {
     },
   });
 
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    const { email, password } = values;
+    await authClient.signIn.email(
+      {
+        email,
+        password,
+        callbackURL: '/dashboard',
+      },
+      {
+        onRequest: () => {
+          setIsSubmitting(true);
+        },
+        onSuccess: () => {
+          form.reset();
+          setIsSubmitting(false);
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+          setIsSubmitting(false);
+        },
+      }
+    );
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((values) => console.log(values))}>
-        <Card className='mx-auto max-w-sm'>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Card className={`${isSubmitting ? 'opacity-75' : ''} mx-auto max-w-sm`}>
           <CardHeader>
             <CardTitle className='text-2xl'>Login</CardTitle>
             <CardDescription>Enter your email below to login to your account</CardDescription>
@@ -71,10 +99,10 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Button type='submit' className='w-full'>
+              <Button type='submit' className='w-full' disabled={isSubmitting}>
                 Login
               </Button>
-              <Button variant='outline' className='w-full'>
+              <Button variant='outline' className='w-full' disabled={isSubmitting}>
                 Login with Google
               </Button>
             </div>
