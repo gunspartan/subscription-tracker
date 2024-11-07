@@ -1,30 +1,37 @@
-import { Dashboard } from '@/components/Dashboard/Dashboard';
-import { EditSubscriptionDialog } from '@/components/Subscriptions/EditSubscriptionDialog';
-import Nav from '@/components/Nav';
-import SubscriptionCard from '@/components/Subscriptions/SubscriptionCard';
-import prisma from '@/lib/db';
+import Image from 'next/image';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import wek from '../public/img/3d3dwek.png';
 
-export default async function Home() {
-  const services = await prisma.service.findMany();
-
+export default function Home() {
   return (
-    <div className='flex min-h-screen w-full flex-col'>
-      <Nav />
-      <div className='mx-0 md:max-w-[60vw] w-full sm:mx-auto'>
-        <Dashboard services={services} />
-        <div className='flex justify-end px-4 md:px-8'>
-          <EditSubscriptionDialog variant='new' />
+    <div className='flex min-h-[calc(100vh - 4rem)] w-full flex-col'>
+      <div className='mt-12 flex justify-center flex-col items-center'>
+        <h1 className='scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl'>
+          Track your subscriptions
+        </h1>
+        <p className='leading-7'>Stay on top of your finances</p>
+        <div className='aspect-video h-[50vh] mx-96 my-24'>
+          <Image
+            className='h-full w-full border-red border-solid border rounded-md object-cover'
+            src={wek}
+            placeholder='empty'
+            alt='Subscription Tracker Screenshot'
+            priority={true}
+          />
         </div>
-        <main className='grid grid-cols-1 lg:grid-cols-2 gap-12 p-4 md:gap-8 md:p-8'>
-          {services.length ? (
-            services.map((service, index) => <SubscriptionCard key={index} service={service} />)
-          ) : (
-            <div className='text-center col-span-full'>
-              <h1 className='text-2xl font-bold text-muted-foreground '>No services yet.</h1>
-              <p className='text-xs text-muted-foreground'>Add a new service to get started. </p>
-            </div>
-          )}
-        </main>
+
+        <h2 className='scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0'>
+          Sign up to get started!
+        </h2>
+        <Button className='my-4 text-xl'>Sign Up</Button>
+        <div className='mt-2 text-center text-sm'>
+          Already have an account?{' '}
+          <Link href='#' className='underline'>
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );
