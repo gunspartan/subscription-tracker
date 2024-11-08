@@ -88,9 +88,9 @@ export function LoginForm() {
                   <FormItem className='grid gap-2'>
                     <div className='flex items-center'>
                       <FormLabel htmlFor='password'>Password</FormLabel>
-                      <Link href='#' className='ml-auto inline-block text-sm underline'>
+                      {/* <Link href='#' className='ml-auto inline-block text-sm underline'>
                         Forgot your password?
-                      </Link>
+                      </Link> */}
                     </div>
                     <FormControl>
                       <Input id='password' type='password' required {...field} />
@@ -102,9 +102,9 @@ export function LoginForm() {
               <Button type='submit' className='w-full' disabled={isSubmitting}>
                 Login
               </Button>
-              <Button variant='outline' className='w-full' disabled={isSubmitting}>
+              {/* <Button variant='outline' className='w-full' disabled={isSubmitting}>
                 Login with Google
-              </Button>
+              </Button> */}
             </div>
             <div className='mt-4 text-center text-sm'>
               Don&apos;t have an account?{' '}

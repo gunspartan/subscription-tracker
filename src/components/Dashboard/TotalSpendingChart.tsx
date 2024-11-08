@@ -14,7 +14,7 @@ import { calculateTotalSpending, formatPrice } from '@/lib/utils';
 const chartConfig = {
   spending: {
     label: 'spending',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(var(--primary))',
   },
 } satisfies ChartConfig;
 

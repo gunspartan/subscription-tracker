@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { CardStackIcon } from '@radix-ui/react-icons';
 
 const Nav = async () => {
   const session = await auth.api.getSession({
@@ -30,19 +31,14 @@ const Nav = async () => {
 
   return (
     <header className='sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-10'>
-      <Link href='/dashboard'>Logo</Link>
-      <div className='flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4'>
-        {/* <form className='ml-auto flex-1 sm:flex-initial'>
-          <div className='relative'>
-            <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
-            <Input
-              type='search'
-              placeholder='Search products...'
-              className='pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]'
-            />
-          </div>
-        </form> */}
-        <div className='ml-auto flex-1'></div>
+      <Link
+        href='/dashboard'
+        className='flex flex-row justify-start items-center gap-2 text-primary'
+      >
+        <CardStackIcon className='h-8 w-8 ' />
+        <h1 className='text-xl'>Tracker</h1>
+      </Link>
+      <div className='flex w-full justify-end items-center gap-4 md:ml-auto md:gap-2 lg:gap-4'>
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -55,7 +51,6 @@ const Nav = async () => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <form action={handleSignOut}>
                 <DropdownMenuItem>

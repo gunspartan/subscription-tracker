@@ -12,7 +12,6 @@ import { Service } from '@/lib/types';
 const chartConfig = {
   other: {
     label: 'Other',
-    color: 'hsl(var(--chart-5))',
   },
 } satisfies ChartConfig;
 
