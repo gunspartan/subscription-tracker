@@ -50,7 +50,9 @@ const Nav = async () => {
             <DropdownMenuContent align='end'>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href='/settings'>Settings</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <form action={handleSignOut}>
                 <DropdownMenuItem>

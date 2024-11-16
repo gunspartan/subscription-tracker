@@ -13,7 +13,7 @@ import { calculateTotalSpending, formatPrice } from '@/lib/utils';
 
 const chartConfig = {
   spending: {
-    label: 'spending',
+    label: 'Total Spending',
     color: 'hsl(var(--primary))',
   },
 } satisfies ChartConfig;
@@ -35,7 +35,7 @@ export function TotalSpendingChart({ services }: { services: Service[] }) {
   }
 
   return (
-    <ChartContainer config={chartConfig} className=' min-h-[200px] max-h-[250px]'>
+    <ChartContainer config={chartConfig} className='h-full w-full'>
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis

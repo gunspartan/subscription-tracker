@@ -55,3 +55,15 @@ export async function editService(service: Service) {
 
   revalidatePath('/');
 }
+
+export async function editAccount(userId: string, accountInfo: { name: string; email: string }) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      name: accountInfo.name,
+      email: accountInfo.email,
+    },
+  });
+
+  revalidatePath('/');
+}

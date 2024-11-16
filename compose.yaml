@@ -7,11 +7,10 @@ services:
     image: subscription-tracker
     ports:
       - '3000:3000'
-      - '5555:5555'
     environment:
       - NODE_ENV=development
     env_file:
-      - .env
+      - .env.local
     develop:
       watch:
         - action: sync
